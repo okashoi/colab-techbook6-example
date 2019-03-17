@@ -48,6 +48,7 @@ return [
 
         'daily' => [
             'driver' => 'daily',
+            'tap' => [App\Logging\CustomizeLogger::class],
             'path' => storage_path('logs/laravel.log'),
             'level' => 'debug',
             'days' => 14,

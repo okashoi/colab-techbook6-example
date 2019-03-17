@@ -27,6 +27,11 @@ class Handler extends ExceptionHandler
     ];
 
     /**
+     * @var array
+     */
+    protected $additionalContext = [];
+
+    /**
      * Report or log an exception.
      *
      * @param  \Exception  $exception
@@ -34,7 +39,21 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $exception)
     {
+        if ($exception instanceof MyAppException) {
+            $this->additionalContext = $exception->getContext();
+        }
+
         parent::report($exception);
+    }
+
+    /**
+     * Get the default context variables for logging.
+     *
+     * @return array
+     */
+    protected function context()
+    {
+        return array_merge(parent::context(), $this->additionalContext);
     }
 
     /**
@@ -46,6 +65,11 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        // 既存の render の仕組みを活用するため、HttpException に変換する
+        if ($exception instanceof MyAppException) {
+            $exception = $exception->toHttpException();
+        }
+
         return parent::render($request, $exception);
     }
 }

@@ -12,5 +12,14 @@
 */
 
 Route::get('/', function () {
+    $users = collect([
+        ['name' => 'Alice'],
+        ['name' => 'Bob'],
+        ['name' => 'Carol'],
+    ]);
+
+    Debugbar::info($users);
+    Debugbar::info($users->sortByDesc('name'));
+
     return view('welcome');
 });
